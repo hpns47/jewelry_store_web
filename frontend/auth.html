@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вход / Регистрация - ✨ LUXURY</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Навигация -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="nav-brand">✨ LUXURY</div>
+        <div class="nav-menu">
+          <a href="index.html" class="nav-link">Главная</a>
+          <a href="catalog.html" class="nav-link">Каталог</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="auth-container">
+        <!-- Вход -->
+        <div class="auth-form" id="loginForm">
+          <h2>Вход в аккаунт</h2>
+          <form onsubmit="login(event)">
+            <div class="form-group">
+              <label for="loginEmail">Email</label>
+              <input
+                type="email"
+                id="loginEmail"
+                required
+                placeholder="your@email.com"
+              />
+            </div>
+            <div class="form-group">
+              <label for="loginPassword">Пароль</label>
+              <input
+                type="password"
+                id="loginPassword"
+                required
+                placeholder="••••••••"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Войти
+            </button>
+            <p class="auth-toggle">
+              Нет аккаунта?
+              <a href="#" onclick="toggleAuthForm(event)">Зарегистрироваться</a>
+            </p>
+          </form>
+          <div class="test-credentials">
+            <p>📝 Тестовые учетные данные:</p>
+            <p>Email: <code>customer@jewelry.com</code></p>
+            <p>Password: <code>customer123</code></p>
+          </div>
+        </div>
+
+        <!-- Регистрация -->
+        <div class="auth-form" id="registerForm" style="display: none">
+          <h2>Создать аккаунт</h2>
+          <form onsubmit="register(event)">
+            <div class="form-group">
+              <label for="registerName">Имя</label>
+              <input
+                type="text"
+                id="registerName"
+                required
+                placeholder="Ваше имя"
+              />
+            </div>
+            <div class="form-group">
+              <label for="registerEmail">Email</label>
+              <input
+                type="email"
+                id="registerEmail"
+                required
+                placeholder="your@email.com"
+              />
+            </div>
+            <div class="form-group">
+              <label for="registerPassword">Пароль</label>
+              <input
+                type="password"
+                id="registerPassword"
+                required
+                placeholder="••••••••"
+              />
+            </div>
+            <div class="form-group">
+              <label for="registerPassword2">Подтверждение пароля</label>
+              <input
+                type="password"
+                id="registerPassword2"
+                required
+                placeholder="••••••••"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Зарегистрироваться
+            </button>
+            <p class="auth-toggle">
+              У вас уже есть аккаунт?
+              <a href="#" onclick="toggleAuthForm(event)">Войти</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2026 ✨ LUXURY Jewelry Store. Все права защищены.</p>
+      </div>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      function toggleAuthForm(e) {
+        e.preventDefault();
+        document.getElementById("loginForm").style.display =
+          document.getElementById("loginForm").style.display === "none"
+            ? "block"
+            : "none";
+        document.getElementById("registerForm").style.display =
+          document.getElementById("registerForm").style.display === "none"
+            ? "block"
+            : "none";
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Каталог - ✨ LUXURY</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Навигация -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="nav-brand">✨ LUXURY</div>
+        <div class="nav-menu">
+          <a href="index.html" class="nav-link">Главная</a>
+          <a href="catalog.html" class="nav-link active">Каталог</a>
+          <a href="#" class="nav-link" id="cartLink">
+            <span class="cart-icon">🛒</span>
+            <span class="cart-count" id="cartCount" style="display: none"
+              >0</span
+            >
+          </a>
+          <a href="#" class="nav-link" id="profileLink">👤 Профиль</a>
+          <a href="#" class="nav-link" id="logoutLink" style="display: none"
+            >Выход</a
+          >
+          <a href="auth.html" class="nav-link" id="loginLink">Вход</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page-header">
+      <h1>Каталог украшений</h1>
+    </div>
+
+    <div class="container">
+      <div class="catalog-wrapper">
+        <!-- Фильтры -->
+        <aside class="filters">
+          <h3>Фильтры</h3>
+
+          <div class="filter-group">
+            <h4>Категория</h4>
+            <label class="filter-checkbox">
+              <input type="radio" name="category" value="all" checked /> Все
+            </label>
+            <label class="filter-checkbox">
+              <input type="radio" name="category" value="ring" /> Кольца
+            </label>
+            <label class="filter-checkbox">
+              <input type="radio" name="category" value="necklace" /> Ожерелья
+            </label>
+            <label class="filter-checkbox">
+              <input type="radio" name="category" value="bracelet" /> Браслеты
+            </label>
+            <label class="filter-checkbox">
+              <input type="radio" name="category" value="earring" /> Серьги
+            </label>
+          </div>
+
+          <div class="filter-group">
+            <h4>Материал</h4>
+            <label class="filter-checkbox">
+              <input type="checkbox" name="material" value="gold" /> Золото
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" name="material" value="silver" /> Серебро
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" name="material" value="platinum" /> Платина
+            </label>
+            <label class="filter-checkbox">
+              <input type="checkbox" name="material" value="bronze" /> Бронза
+            </label>
+          </div>
+
+          <div class="filter-group">
+            <h4>Цена</h4>
+            <input
+              type="range"
+              min="0"
+              max="100000"
+              value="100000"
+              class="price-slider"
+              id="priceFilter"
+            />
+            <p>До <span id="priceValue">100000</span> ₽</p>
+          </div>
+
+          <button class="btn btn-secondary" onclick="resetFilters()">
+            Сбросить фильтры
+          </button>
+        </aside>
+
+        <!-- Товары -->
+        <main class="products">
+          <div class="products-controls">
+            <div class="sort-select">
+              <label>Сортировать по:</label>
+              <select id="sortSelect" onchange="sortProducts()">
+                <option value="newest">Новые</option>
+                <option value="price-low">Цена: низкая→высокая</option>
+                <option value="price-high">Цена: высокая→низкая</option>
+                <option value="popular">Популярные</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="products-grid" id="productsGrid">
+            <!-- Заполняется JS -->
+          </div>
+
+          <div id="emptyState" class="empty-state" style="display: none">
+            <p>😔 Товаров не найдено</p>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Модальное окно товара -->
+    <div class="modal" id="productModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeProductModal()">&times;</span>
+        <div id="modalBody">
+          <!-- Заполняется JS -->
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2026 ✨ LUXURY Jewelry Store. Все права защищены.</p>
+      </div>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      document
+        .getElementById("sortSelect")
+        .addEventListener("change", sortProducts);
+      document.getElementById("priceFilter").addEventListener("input", (e) => {
+        document.getElementById("priceValue").textContent = e.target.value;
+        filterProducts();
+      });
+      document.querySelectorAll('input[name="category"]').forEach((el) => {
+        el.addEventListener("change", filterProducts);
+      });
+      document.querySelectorAll('input[name="material"]').forEach((el) => {
+        el.addEventListener("change", filterProducts);
+      });
+
+      loadCatalog();
+    </script>
+  </body>
+</html>

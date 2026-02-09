@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Профиль - ✨ LUXURY</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Навигация -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="nav-brand">✨ LUXURY</div>
+        <div class="nav-menu">
+          <a href="index.html" class="nav-link">Главная</a>
+          <a href="catalog.html" class="nav-link">Каталог</a>
+          <a href="#" class="nav-link" id="cartLink">
+            <span class="cart-icon">🛒</span>
+            <span class="cart-count" id="cartCount" style="display: none"
+              >0</span
+            >
+          </a>
+          <a href="profile.html" class="nav-link active">👤 Профиль</a>
+          <a
+            href="#"
+            class="nav-link"
+            onclick="
+              logout();
+              return false;
+            "
+            >Выход</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <div class="page-header">
+      <h1>Мой профиль</h1>
+    </div>
+
+    <div class="container">
+      <div class="profile-wrapper">
+        <!-- Информация профиля -->
+        <div class="profile-card">
+          <h2>Личная информация</h2>
+          <form onsubmit="updateProfile(event)">
+            <div class="form-group">
+              <label for="profileName">Имя</label>
+              <input type="text" id="profileName" required />
+            </div>
+            <div class="form-group">
+              <label for="profileEmail">Email (не изменяется)</label>
+              <input type="email" id="profileEmail" disabled />
+            </div>
+            <div class="form-group">
+              <label for="profilePhone">Телефон</label>
+              <input type="tel" id="profilePhone" />
+            </div>
+            <div class="form-group">
+              <label for="profileAddress">Адрес доставки</label>
+              <input
+                type="text"
+                id="profileAddress"
+                placeholder="Адрес для доставки"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">
+              Сохранить изменения
+            </button>
+          </form>
+        </div>
+
+        <!-- История заказов -->
+        <div class="profile-card">
+          <h2>Мои заказы</h2>
+          <div id="ordersList">
+            <p>Загрузка...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2026 ✨ LUXURY Jewelry Store. Все права защищены.</p>
+      </div>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      function loadProfile() {
+        const user = getUser();
+        if (!user) {
+          window.location.href = "auth.html";
+          return;
+        }
+
+        // Заполняем профиль
+        API.getProfile(user.id).then((data) => {
+          document.getElementById("profileName").value = data.user.name || "";
+          document.getElementById("profileEmail").value = data.user.email || "";
+          document.getElementById("profilePhone").value = data.user.phone || "";
+          document.getElementById("profileAddress").value =
+            data.user.address || "";
+        });
+
+        // Загружаем заказы
+        API.getMyOrders().then((data) => {
+          const ordersList = document.getElementById("ordersList");
+          if (data.orders.length === 0) {
+            ordersList.innerHTML = "<p>У вас еще нет заказов</p>";
+            return;
+          }
+
+          ordersList.innerHTML = data.orders
+            .map(
+              (order) => `
+          <div class="order-item">
+            <div class="order-header">
+              <div>
+                <strong>Заказ #${order._id.substring(0, 8)}</strong>
+                <span class="order-date">${new Date(order.createdAt).toLocaleDateString("ru-RU")}</span>
+              </div>
+              <span class="order-status status-${order.status}">${getStatusText(order.status)}</span>
+            </div>
+            <div class="order-items">
+              ${order.items
+                .map(
+                  (item) => `
+                <p>${item.jewelryId.name} × ${item.quantity} = ${item.quantity * item.price} ₽</p>
+              `,
+                )
+                .join("")}
+            </div>
+            <div class="order-footer">
+              <strong>Итого: ${order.totalPrice} ₽</strong>
+              ${order.status === "pending" ? `<button class="btn btn-danger btn-small" onclick="cancelOrder('${order._id}')">Отменить</button>` : ""}
+            </div>
+          </div>
+        `,
+            )
+            .join("");
+        });
+      }
+
+      function getStatusText(status) {
+        const statuses = {
+          pending: "⏳ В ожидании оплаты",
+          paid: "✓ Оплачено",
+          shipped: "📦 Отправлено",
+          delivered: "✓ Доставлено",
+          cancelled: "✗ Отменено",
+        };
+        return statuses[status] || status;
+      }
+
+      function cancelOrder(orderId) {
+        if (confirm("Вы уверены, что хотите отменить заказ?")) {
+          API.cancelOrder(orderId)
+            .then(() => {
+              showNotification("Заказ отменен");
+              loadProfile();
+            })
+            .catch((err) => showNotification(err, "error"));
+        }
+      }
+
+      loadProfile();
+    </script>
+  </body>
+</html>
