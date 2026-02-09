@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Админ панель - ✨ LUXURY</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body>
+    <!-- Навигация -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="nav-brand">✨ LUXURY ADMIN</div>
+        <div class="nav-menu">
+          <a
+            href="#"
+            class="nav-link"
+            onclick="
+              logout();
+              return false;
+            "
+            >Выход</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <div class="admin-container">
+      <!-- Боковое меню -->
+      <aside class="admin-sidebar">
+        <ul class="admin-menu">
+          <li>
+            <a href="#" onclick="showSection('dashboard', event)" class="active"
+              >📊 Дашборд</a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="showSection('jewelry', event)">💍 Украшения</a>
+          </li>
+          <li>
+            <a href="#" onclick="showSection('orders', event)">📦 Заказы</a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Основной контент -->
+      <main class="admin-main">
+        <!-- Дашборд -->
+        <section id="dashboard" class="admin-section">
+          <h1>Дашборд</h1>
+          <div class="dashboard-stats">
+            <div class="stat-card">
+              <h3>Всего заказов</h3>
+              <p class="stat-number" id="totalOrders">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Украшений в каталоге</h3>
+              <p class="stat-number" id="totalJewelry">0</p>
+            </div>
+            <div class="stat-card">
+              <h3>Сумма заказов (ожидание)</h3>
+              <p class="stat-number" id="pendingAmount">0 ₽</p>
+            </div>
+            <div class="stat-card">
+              <h3>Сумма заказов (оплачено)</h3>
+              <p class="stat-number" id="paidAmount">0 ₽</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Управление украшениями -->
+        <section id="jewelry" class="admin-section" style="display: none">
+          <div class="section-header">
+            <h1>Управление украшениями</h1>
+            <button class="btn btn-primary" onclick="showAddJewelryForm()">
+              + Добавить украшение
+            </button>
+          </div>
+
+          <div id="jewelryForm" class="admin-form" style="display: none">
+            <h2>Форма украшения</h2>
+            <form onsubmit="saveJewelry(event)">
+              <input type="hidden" id="jewelryId" />
+              <div class="form-group">
+                <label for="jewelryName">Название</label>
+                <input type="text" id="jewelryName" required />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="jewelryPrice">Цена</label>
+                  <input type="number" id="jewelryPrice" min="0" required />
+                </div>
+                <div class="form-group">
+                  <label for="jewelryStock">Количество</label>
+                  <input type="number" id="jewelryStock" min="0" required />
+                </div>
+                <div class="form-group">
+                  <label for="jewelryWeight">Вес (г)</label>
+                  <input
+                    type="number"
+                    id="jewelryWeight"
+                    step="0.1"
+                    min="0"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="jewelryMaterial">Материал</label>
+                  <select id="jewelryMaterial" required>
+                    <option value="">Выберите материал</option>
+                    <option value="gold">Золото</option>
+                    <option value="silver">Серебро</option>
+                    <option value="platinum">Платина</option>
+                    <option value="bronze">Бронза</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="jewelryCategory">Категория</label>
+                  <select id="jewelryCategory" required>
+                    <option value="">Выберите категорию</option>
+                    <option value="ring">Кольцо</option>
+                    <option value="necklace">Ожерелье</option>
+                    <option value="bracelet">Браслет</option>
+                    <option value="earring">Серьга</option>
+                    <option value="brooch">Брошь</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="jewelryDescription">Описание</label>
+                <textarea id="jewelryDescription" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="jewelryImage">URL изображения</label>
+                <input type="url" id="jewelryImage" />
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="cancelEditJewelry()"
+                >
+                  Отменить
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Название</th>
+                  <th>Материал</th>
+                  <th>Категория</th>
+                  <th>Цена</th>
+                  <th>Количество</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody id="jewelryTable">
+                <tr>
+                  <td colspan="6">Загрузка...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Управление заказами -->
+        <section id="orders" class="admin-section" style="display: none">
+          <h1>Управление заказами</h1>
+          <div class="table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID заказа</th>
+                  <th>Клиент</th>
+                  <th>Сумма</th>
+                  <th>Статус</th>
+                  <th>Дата</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTable">
+                <tr>
+                  <td colspan="6">Загрузка...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Модаль для обновления статуса -->
+    <div class="modal" id="statusModal">
+      <div class="modal-content">
+        <span class="close" onclick="closeStatusModal()">&times;</span>
+        <h2>Обновить статус заказа</h2>
+        <form onsubmit="updateOrderStatus(event)">
+          <input type="hidden" id="statusOrderId" />
+          <div class="form-group">
+            <label for="statusSelect">Новый статус</label>
+            <select id="statusSelect" required>
+              <option value="">Выберите статус</option>
+              <option value="pending">⏳ В ожидании оплаты</option>
+              <option value="paid">✓ Оплачено</option>
+              <option value="shipped">📦 Отправлено</option>
+              <option value="delivered">✓ Доставлено</option>
+              <option value="cancelled">✗ Отменено</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Обновить</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+  </body>
+</html>

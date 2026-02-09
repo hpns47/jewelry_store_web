@@ -1,0 +1,253 @@
+/* ============ АДМИН ПАНЕЛЬ ============ */
+.admin-container {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: calc(100vh - 80px);
+}
+
+.admin-sidebar {
+  background: var(--dark-color);
+  padding: 2rem 0;
+  position: sticky;
+  top: 80px;
+  height: fit-content;
+}
+
+.admin-menu {
+  list-style: none;
+}
+
+.admin-menu li a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 1rem 1.5rem;
+  transition: all 0.3s;
+  border-left: 3px solid transparent;
+}
+
+.admin-menu li a:hover,
+.admin-menu li a.active {
+  background: rgba(212, 175, 55, 0.1);
+  border-left-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.admin-main {
+  padding: 2rem;
+  background: var(--light-color);
+  overflow-y: auto;
+}
+
+.admin-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.admin-section h1 {
+  margin-bottom: 2rem;
+  color: var(--dark-color);
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 1rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.section-header h1 {
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+
+/* ============ ДАШБОРД ============ */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #e5c158 100%);
+  color: var(--dark-color);
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+}
+
+.stat-card h3 {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* ============ ТАБЛИЦЫ ============ */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.admin-table thead {
+  background: var(--dark-color);
+  color: white;
+}
+
+.admin-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.admin-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table tbody tr:hover {
+  background: var(--light-color);
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ============ ФОРМА УКРАШЕНИЯ ============ */
+.admin-form {
+  background: var(--light-color);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
+}
+
+.admin-form h2 {
+  margin-bottom: 1.5rem;
+  color: var(--dark-color);
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+/* ============ ДЕЙСТВИЯ В ТАБЛИЦЕ ============ */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-buttons .btn {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.btn-edit {
+  background: #3498db;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #2980b9;
+}
+
+.btn-delete {
+  background: var(--danger-color);
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #c0392b;
+}
+
+.btn-view {
+  background: #27ae60;
+  color: white;
+}
+
+.btn-view:hover {
+  background: #229954;
+}
+
+/* ============ МОДАЛЬ ДЛЯ СТАТУСА ============ */
+#statusModal .modal-content {
+  width: 90%;
+  max-width: 400px;
+}
+
+#statusModal h2 {
+  margin-bottom: 1.5rem;
+  color: var(--dark-color);
+}
+
+/* ============ АДАПТИВНОСТЬ ============ */
+@media (max-width: 768px) {
+  .admin-container {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: relative;
+    top: 0;
+  }
+
+  .admin-menu li a {
+    padding: 0.8rem 1rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .section-header .btn {
+    width: 100%;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-table {
+    font-size: 0.9rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.75rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .action-buttons .btn {
+    width: 100%;
+  }
+}
